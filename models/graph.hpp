@@ -3,12 +3,13 @@
 
 #include <vector>
 #include <iostream>
+#include <set>
 using namespace std;
 
 class graph
 {
 private:
-	vector<vector<int> > v;
+	vector<set<int> > v;
 
 	/**
 	*	push back a target vertice in a vertice
@@ -16,8 +17,8 @@ private:
 	void pushBackEdge(int v_index, int v_target);
 
 public:
-	graph();
-	graph(vector<vector<int> > vertices);
+	graph() = default;
+	graph(vector<set<int> > vertices);
 	~graph() = default;
 
 	/**
@@ -31,6 +32,11 @@ public:
 	void newNVertices(int n);
 
 	/**
+	*	returns true if v2 is in v1's neighbors
+	*/
+	bool edgeExists(const set<int>& v1, int v2) const;
+
+	/**
 	*	add an edge
 	*/
 	void addEdge(int v1, int v2);
@@ -38,7 +44,7 @@ public:
 	/**
 	*	get a vertice
 	*/
-	const vector<int>& getVertice(int v_index);
+	const set<int>& getVertice(int v_index) const;
 
 	/**
 	*	get the degree of the vertice at the index specified

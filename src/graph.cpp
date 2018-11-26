@@ -1,17 +1,16 @@
 #include "../models/graph.hpp"
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
-graph::graph() { }
-
-graph::graph(vector<vector<int> > vertices) : v (vertices)
+graph::graph(vector<set<int> > vertices) : v (vertices)
 {
 
 }
 
 int graph::newVertice()
 {
-	this->v.push_back(vector<int>{});
+	this->v.push_back(set<int>());
 	return this->v.size()-1;
 }
 
@@ -23,18 +22,28 @@ void graph::newNVertices(int n)
 
 void graph::pushBackEdge(int v_index, int v_target)
 {
-	this->v[v_index].push_back(v_target);
+	this->v[v_index].insert(v_target);
+}
+
+bool graph::edgeExists(const set<int>& v1, int v2) const
+{
+	if ( v1.find(v2) != v1.end() )
+		return true;
+	return false;
 }
 
 void graph::addEdge(int v1, int v2)
 {
 	if ( v1 >= this->v.size() || v2 >= this->v.size() )
 		return;
-	pushBackEdge(v1,v2);
-	pushBackEdge(v2,v1);
+
+	if ( !this->edgeExists( this->getVertice(v1), v2 ) )
+		pushBackEdge(v1,v2);
+	if ( !this->edgeExists( this->getVertice(v2), v1 ) )
+		pushBackEdge(v2,v1);
 }
 
-const vector<int>& graph::getVertice(int v_index)
+const set<int>& graph::getVertice(int v_index) const
 {
 	return this->v.at(v_index);
 }
@@ -46,14 +55,15 @@ int graph::getVerticeDegree(int v_index) const
 
 void graph::printGraph() const
 {
+	set<int>::iterator j;
 	for ( int i = 0; i < this->v.size(); i++ )
 	{
-		cout << "v[" << i << "] -> ";
-		for ( int j = 0; j < this->v.at(i).size(); j++ )
+		cout << "v[" << setw(2) << i << "] -> ";
+		for ( j = v.at(i).begin(); j != this->v.at(i).end(); j++ )
 		{
-			cout << this->v.at(i).at(j);
-			if ( j+1 < this->v.at(i).size() )
+			if ( j != v.at(i).begin() )
 				cout << ", ";
+			cout << setw(2) << *j;
 		}
 		cout << endl;
 	}
